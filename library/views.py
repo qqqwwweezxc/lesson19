@@ -1,3 +1,4 @@
+from django.db.models import QuerySet
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
@@ -7,10 +8,11 @@ from .permissions import IsAdminOrReadWrite
 
 
 class BookViewSet(viewsets.ModelViewSet):
-    queryset = Book.objects.all().order_by('-created_at')
+    """A class to represent a book list"""
+    queryset: QuerySet[Book] = Book.objects.all().order_by('-created_at')
     serializer_class = BookSerializer
     permission_classes = [IsAdminOrReadWrite]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
 
-    filterset_fields = ['author', 'genre', 'publication_year']
-    search_fields = ['title']
+    filterset_fields: list[str] = ['author', 'genre', 'publication_year']
+    search_fields: list[str] = ['title']
